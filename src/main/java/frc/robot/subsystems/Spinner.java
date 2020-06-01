@@ -45,22 +45,20 @@ public class Spinner extends SubsystemBase {
      * should use the {@link #getInstance()} method to get the instance.
      */
     private Spinner() {
-//        addChild("color", colorPicker);
-//        colorPicker.addOption("Blue", kBlueTarget);
-//        colorPicker.addOption("Red", kRedTarget);
-//        colorPicker.addOption("Green", kGreenTarget);
-//        colorPicker.addOption("Yellow", kYellowTarget);
-
+        colorPicker.setDefaultOption("Blue", kBlueTarget);
+        colorPicker.addOption("Red", kRedTarget);
+        colorPicker.addOption("Green", kGreenTarget);
+        colorPicker.addOption("Yellow", kYellowTarget);
+        SmartDashboard.putData(colorPicker);
         // TODO: Set the default command, if any, for this subsystem by calling setDefaultCommand(command)
         //       in the constructor or in the robot coordination class, such as RobotContainer.
         //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
         //       such as SpeedControllers, Encoders, DigitalInputs, etc.
     }
 
-//    SendableChooser<Color> colorPicker = new SendableChooser<>();
+    SendableChooser<Color> colorPicker = new SendableChooser<>();
     WPI_VictorSPX spinner = new WPI_VictorSPX(SPINNER_CAN);
     ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-    Color target;
 
     public Color getCurrent() {
         return current;
@@ -69,17 +67,16 @@ public class Spinner extends SubsystemBase {
     Color current;
 
     public Color getTarget() {
-        return target;
+        return colorPicker.getSelected();
     }
 
 
     @Override
     public void periodic() {
-//        target = colorPicker.getSelected();
         Color detectedColor = m_colorSensor.getColor();
         String colorString;
         ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
-//        current = match.color;
+        current = match.color;
 
         if (match.color == kBlueTarget) {
             colorString = "Blue";
